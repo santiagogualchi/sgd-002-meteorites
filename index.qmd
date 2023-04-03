@@ -216,6 +216,13 @@ This plot will have the number of meteorites found by year:
 data_counts_by_year_since_1800 <- data_counts_by_year |> 
   filter(year >= 1800)
 
+milestones <- tribble(
+  ~year, ~milestone,
+  1803,  "Recognition of meteorites<br>as extraterrestrial",
+  1957,  "Beginning of<br>the Space Age",
+  2023,  "Present day"
+)
+
 ggplot(
   data_counts_by_year_since_1800,
   mapping = aes(
@@ -223,15 +230,40 @@ ggplot(
     y = n
   )
 ) +
+  geom_vline(
+    data = milestones,
+    mapping = aes(
+      xintercept = year
+    ),
+    linetype = "longdash",
+    color = color_grey_1
+  ) +
+  geom_richtext(
+    data = milestones,
+    mapping = aes(
+      x = year + 3,
+      label = paste0(
+        "<span style='font-size:12pt;'>**", year, "**</span><br>",
+        "<span style='font-size:11pt;'>", milestone, "</span><br>"
+      )
+    ),
+    y = max(data_counts_by_year_since_1800$n) + 1800,
+    color = color_grey_3,
+    fill = "transparent",
+    label.color = "transparent",
+    hjust = 0,
+    vjust = 1,
+    label.padding = unit(0, "pt")
+  ) +
   geom_col(
     fill = color_accent_light,
     # This overlaps, but I want the bars to be more visible.
     width = 2
   ) +
   scale_x_continuous(
-    breaks = seq(1800, 2050, by = 50),
     limits = c(1800, 2050),
-    expand = expansion(mult = .05)
+    breaks = seq(1800, 2050, by = 50),
+    expand = expansion(mult = c(.05, .075))
   ) +
   scale_y_continuous(
     breaks = NULL,
@@ -239,6 +271,7 @@ ggplot(
   ) +
   labs(
     title = "Most Meteorites Were Found Very Recently",
+    subtitle = "Almost all discoveries happened after the Space Age began",
     x = NULL,
     y = NULL
   ) +
