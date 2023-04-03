@@ -2,3 +2,5 @@
 .Rhistory
 .RData
 .Ruserdata
+nogit/
+.DS_STORE
