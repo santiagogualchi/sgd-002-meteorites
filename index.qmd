@@ -12,7 +12,10 @@ format:
 ## Packages
 
 ```{r}
-
+library(forcats)
+library(dplyr)
+library(readr)
+library(tibble)
 ```
 
 ## Palette
@@ -28,6 +31,56 @@ color_grey_4 <- "#444444"
 color_accent_light <- "#62beff"
 color_accent_dark <- "#0077cc"
 ```
+
+## Data
+
+We'll use the web-scraped data if available, or the alternative data otherwise:
+
+```{r}
+file_path <- if (file.exists("nogit/tidy-data.csv")) {
+  "nogit/tidy-data.csv"
+} else {
+  "data/meteorite-landings/meteorite-landings.csv"
+}
+
+data_raw <- read_csv(
+  file_path,
+  na = "",
+  col_types = cols_only(
+    name = col_character(),
+    nametype = col_factor(),
+    # recclass = col_factor(),
+    mass = col_double(),
+    fall = col_factor(),
+    year = col_integer(),
+    reclat = col_double(),
+    reclong = col_double(),
+    place = col_character()
+  )
+) |> 
+  # This mutates are performed to transform the alternative data into a format
+  # compatible with the web-scraped data:
+  mutate(
+    nametype = fct_recode(nametype, Official = "Valid"),
+    fall = fct_recode(fall, Fall = "Fell", Find = "Found")
+  ) |> 
+  # This left_join is performed in order to ensure that there's a place column
+  # in the alternative data.
+  left_join(
+    tibble(name = "INEXISTENT-NAME-SANTIGUALCHI.DATA", place = ""),
+    by = "name",
+    # We include the suffixes because, for the web-scraped data, there'll be
+    # two place columns. This way, we preserve the original place column name
+    # and distinguish the dummy column with the suffix "_drop".
+    suffix = c("", "_drop")
+  ) |> 
+  # Now we can drop the dummy column if present.
+  select(-ends_with("_drop"))
+
+head(data_raw, 10)
+```
+
+## Cover
 
 
 
