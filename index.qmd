@@ -23,6 +23,7 @@ library(glue)
 library(readr)
 library(stringr)
 library(tibble)
+library(tidyr)
 ```
 
 ## Palette
@@ -333,6 +334,149 @@ ggplot(
     subtitle = glue(
       "And many others are still in the process of being recognized"
     ),
+    x = NULL,
+    y = NULL,
+    caption = "Source: The Meteoritical Bulletin Database"
+  ) +
+  theme_default
+```
+
+## Impact positions
+
+```{r}
+data_positions <- data_tidy |> 
+  filter(longitude >= -180 & longitude <= 180) |> 
+  replace_na(
+    list(
+      mass = median(data_tidy$mass, na.rm = TRUE)
+    )
+  ) |> 
+  arrange(desc(mass))
+```
+
+```{r}
+get_meteorite_label <- function(name, year, mass, place) {
+  glue(
+    "<span style='font-size:12pt;'>**{name}** ({year})</span><br>",
+    "<span style='font-size:11pt;'>", place, "<br>",
+    "{prettyNum(mass / 1e3, big.mark = ',')} kg</span>"
+  )
+}
+
+get_meteorite_textbox <- function(data, nrow, x, y) {
+  geom_textbox(
+    data = data[nrow, ],
+    mapping = aes(
+      label = get_meteorite_label(name, year, mass, place)
+    ),
+    x = x,
+    y = y,
+    box.r = unit(0, "pt"),
+    fill = color_bg,
+    box.color = color_accent_dark,
+    box.size = .5,
+    color = color_grey_4
+  )
+}
+
+world <- map_data("world")
+
+ggplot(data_positions) +
+  geom_map(
+    data = world,
+    map = world,
+    mapping = aes(
+      long,
+      lat,
+      map_id = region
+    ),
+    color = color_grey_1,
+    fill = color_grey_1
+  ) +
+  geom_point(
+    aes(
+      x = longitude,
+      y = latitude,
+      size = mass
+    ),
+    color = color_grey_2,
+    shape = 1,
+    alpha = 1/2
+  ) +
+  geom_segment(
+    data = data_positions[1:4, ],
+    mapping = aes(
+      x = longitude,
+      y = latitude,
+      xend = longitude
+    ),
+    yend = c(135, -135, 135, -135),
+    color = color_accent_dark
+  ) +
+  geom_segment(
+    data = data_positions[1:4, ],
+    mapping = aes(
+      x = longitude
+    ),
+    y = c(135, -135, 135, -135),
+    xend = c(110, 110, -110, -110),
+    yend = c(135, -135, 135, -135),
+    color = color_accent_dark
+  ) +
+  get_meteorite_textbox(
+    data_positions,
+    nrow = 1,
+    x = 110,
+    y = 135
+  ) +
+  get_meteorite_textbox(
+    data_positions,
+    nrow = 2,
+    x = 110,
+    y = -135
+  ) +
+  get_meteorite_textbox(
+    data_positions,
+    nrow = 3,
+    x = -110,
+    y = 135
+  ) +
+  get_meteorite_textbox(
+    data_positions,
+    nrow = 4,
+    x = -110,
+    y = -135
+  ) +
+  geom_point(
+    data = data_positions[1:4, ],
+    aes(
+      x = longitude,
+      y = latitude,
+      size = mass
+    ),
+    color = color_accent_dark,
+    fill = color_accent_light,
+    shape = 21,
+    stroke = .65
+  ) +
+  guides(
+    size = "none"
+  ) +
+  scale_x_continuous(
+    breaks = NULL,
+    expand = expansion(mult = 0),
+    limits = c(-180, 180)
+  ) +
+  scale_y_continuous(
+    breaks = NULL,
+    expand = expansion(mult = 0),
+    # latitude is bound -90 to 90, but we're including extra space for the
+    # textboxes.
+    limits = c(-180, 180)
+  ) +
+  labs(
+    title = "A Global Phenomenon",
+    subtitle =  "Meteorites have been striking Earth all over the globe",
     x = NULL,
     y = NULL,
     caption = "Source: The Meteoritical Bulletin Database"
