@@ -18,6 +18,7 @@ execute:
 library(forcats)
 library(dplyr)
 library(readr)
+library(stringr)
 library(tibble)
 ```
 
@@ -81,6 +82,24 @@ data_raw <- read_csv(
   select(-ends_with("_drop"))
 
 head(data_raw, 10)
+```
+
+Now we'll do some tidying:
+
+```{r}
+data_tidy <- data_raw |> 
+  # Rename to have more descriptive names.
+  rename(
+    # class = recclass,
+    latitude = reclat,
+    longitude = reclong
+  ) |> 
+  # Remove data-points of on-going year.
+  filter(year < max(year)) |> 
+  # Keep only meteorites (other nametypes are not meteorites).
+  filter(nametype %in% c("Official", "Provisional")) |> 
+  # Remove meaningless trailing characters from names.
+  mutate(name = str_replace(name, r"{\s*\*\*$}", ""))
 ```
 
 ## Cover
