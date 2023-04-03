@@ -54,6 +54,48 @@ theme_cover <- theme_void() +
   )
 ```
 
+### Default theme
+
+```{r}
+default_theme <- theme_minimal() +
+  theme(
+    text = element_text(
+      color = color_grey_3,
+      size = unit(14, "pt")
+    ),
+    axis.text.x = element_text(
+      size = unit(10, "pt"),
+      color = color_grey_3
+    ),
+    panel.grid = element_blank(),
+    plot.background = element_rect(
+      fill = color_bg,
+      color = "transparent"
+    ),
+    plot.title = element_text(
+      face = "bold",
+      color = color_grey_4,
+      size = unit(18, "pt")
+    ),
+    plot.title.position = "plot",
+    plot.margin = margin(.04, .04, .04, .04, "npc")
+  )
+```
+
+### Add X line to theme
+
+```{r}
+x_line_theme <- 
+  theme(
+    axis.ticks.x = element_line(
+      color = color_grey_1
+    ),
+    axis.line.x = element_line(
+      color = color_grey_1
+    )
+  )
+```
+
 ## Data
 
 We'll use the web-scraped data if available, or the alternative data otherwise:
@@ -166,5 +208,41 @@ ggplot(tibble(0)) +
 ```
 
 
+## Discoveries per year
 
+This plot will have the number of meteorites found by year:
+
+```{r}
+data_counts_by_year_since_1800 <- data_counts_by_year |> 
+  filter(year >= 1800)
+
+ggplot(
+  data_counts_by_year_since_1800,
+  mapping = aes(
+    x = year,
+    y = n
+  )
+) +
+  geom_col(
+    fill = color_accent_light,
+    # This overlaps, but I want the bars to be more visible.
+    width = 2
+  ) +
+  scale_x_continuous(
+    breaks = seq(1800, 2050, by = 50),
+    limits = c(1800, 2050),
+    expand = expansion(mult = .05)
+  ) +
+  scale_y_continuous(
+    breaks = NULL,
+    expand = expansion(mult = 0, add = c(0, 2000))
+  ) +
+  labs(
+    title = "Most Meteorites Were Found Very Recently",
+    x = NULL,
+    y = NULL
+  ) +
+  default_theme +
+  x_line_theme
+```
 
