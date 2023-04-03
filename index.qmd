@@ -15,8 +15,8 @@ execute:
 ## Packages
 
 ```{r}
-library(forcats)
 library(dplyr)
+library(forcats)
 library(readr)
 library(stringr)
 library(tibble)
@@ -95,11 +95,18 @@ data_tidy <- data_raw |>
     longitude = reclong
   ) |> 
   # Remove data-points of on-going year.
-  filter(year < max(year)) |> 
+  filter(year < max(year, na.rm = TRUE)) |> 
   # Keep only meteorites (other nametypes are not meteorites).
   filter(nametype %in% c("Official", "Provisional")) |> 
-  # Remove meaningless trailing characters from names.
-  mutate(name = str_replace(name, r"{\s*\*\*$}", ""))
+  mutate(
+    # Remove meaningless trailing characters from names.
+    name = str_replace(name, r"{\s*\*\*$}", ""),
+    # Remove meteorites on null island.
+    latitude = if_else(latitude == 0 & longitude == 0, NA_real_, latitude),
+    longitude = if_else(latitude == 0 & longitude == 0, NA_real_, longitude)
+  )
+
+head(data_tidy, 10)
 ```
 
 ## Cover
