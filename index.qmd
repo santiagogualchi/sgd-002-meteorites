@@ -127,6 +127,17 @@ data_tidy <- data_raw |>
 head(data_tidy, 10)
 ```
 
+Get counts by year:
+
+```{r}
+data_counts_by_year <- data_tidy |> 
+  group_by(year) |> 
+  summarize(n = n())
+
+head(data_counts_by_year, 10)
+```
+
+
 ## Cover
 
 This will be the cover of the instagram post. I'll use `{ggplot2}` to create it,
