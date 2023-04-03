@@ -19,6 +19,7 @@ library(dplyr)
 library(forcats)
 library(ggplot2)
 library(ggtext)
+library(glue)
 library(readr)
 library(stringr)
 library(tibble)
@@ -57,7 +58,7 @@ theme_cover <- theme_void() +
 ### Default theme
 
 ```{r}
-default_theme <- theme_minimal() +
+theme_default <- theme_minimal() +
   theme(
     text = element_text(
       color = color_grey_3,
@@ -78,6 +79,7 @@ default_theme <- theme_minimal() +
       size = unit(18, "pt")
     ),
     plot.title.position = "plot",
+    plot.caption = element_text(color = color_grey_2, size = 10),
     plot.margin = margin(.04, .04, .04, .04, "npc")
   )
 ```
@@ -85,7 +87,7 @@ default_theme <- theme_minimal() +
 ### Add X line to theme
 
 ```{r}
-x_line_theme <- 
+theme_x_line <- 
   theme(
     axis.ticks.x = element_line(
       color = color_grey_1
@@ -273,9 +275,67 @@ ggplot(
     title = "Most Meteorites Were Found Very Recently",
     subtitle = "Almost all discoveries happened after the Space Age began",
     x = NULL,
-    y = NULL
+    y = NULL,
+    caption = "Source: The Meteoritical Bulletin Database"
   ) +
-  default_theme +
-  x_line_theme
+  theme_default +
+  theme_x_line
 ```
 
+## Discoveries Last 10 Years
+
+```{r}
+data_counts_by_year_last_10_years <- data_counts_by_year |>
+  filter(year > (max(year) - 10))
+
+# This function formats x. It truncates x to only keep the number signif of
+# significative digits (even for whole numbers). For example,
+# pretty_number(12345) returns 12000. Further arguments are passed to prettyNum.
+pretty_number <- function(x, signif = 2, ...) {
+  (x - x %% 10 ^ (floor(log10(x)) - (signif - 1))) |> 
+    prettyNum(...)
+}
+
+ggplot(
+  data_counts_by_year_last_10_years,
+  mapping = aes(
+    x = year,
+    y = n
+  )
+) +
+  geom_col(
+    fill = color_accent_light,
+    width = .7
+  ) +
+  geom_text(
+    aes(
+      label = n
+    ),
+    size = 4,
+    fontface = "bold",
+    color = color_bg,
+    nudge_y = -60
+  ) +
+  scale_x_continuous(
+    breaks = data_counts_by_year_last_10_years$year,
+    expand = expansion(mult = 0)
+  ) +
+  scale_y_continuous(
+    breaks = NULL,
+    expand = expansion(mult = 0)
+  ) +
+  labs(
+    title = glue(
+      "Over ",
+      pretty_number(sum(data_counts_by_year_last_10_years$n), big.mark = ","),
+      " Meteorites Found In 10 Years", 
+    ),
+    subtitle = glue(
+      "And many others are still in the process of being recognized"
+    ),
+    x = NULL,
+    y = NULL,
+    caption = "Source: The Meteoritical Bulletin Database"
+  ) +
+  theme_default
+```
