@@ -3,8 +3,11 @@ title: Meteorite Landings
 author: Santiago Gualchi
 format:
   html:
+    df-print: kable
     fig-width: 6
     fig-height: 6
+execute: 
+  warning: false
 ---
 
 ## Introduction
