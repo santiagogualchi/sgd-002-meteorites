@@ -17,6 +17,8 @@ execute:
 ```{r}
 library(dplyr)
 library(forcats)
+library(ggplot2)
+library(ggtext)
 library(readr)
 library(stringr)
 library(tibble)
@@ -34,6 +36,22 @@ color_grey_3 <- "#6d6d6d"
 color_grey_4 <- "#444444"
 color_accent_light <- "#62beff"
 color_accent_dark <- "#0077cc"
+```
+
+## Themes
+
+Here I define the themes for the ggplots.
+
+### Cover theme
+
+```{r}
+theme_cover <- theme_void() +
+  theme(
+    plot.background = element_rect(
+      fill = color_accent_light,
+      color = "transparent"
+    )
+  )
 ```
 
 ## Data
@@ -110,6 +128,31 @@ head(data_tidy, 10)
 ```
 
 ## Cover
+
+This will be the cover of the instagram post. I'll use `{ggplot2}` to create it,
+to have a consistent format across all slides:
+
+```{r}
+ggplot(tibble(0)) +
+  geom_textbox(
+    label = "Meteorites:<br>Landings<br>And Discoveries",
+    x = 0,
+    y = 0,
+    width = unit(5, "inch"),
+    size = 14,
+    fontface = "bold",
+    color = NA,
+    text.color = color_bg,
+    fill = NA,
+    lineheight = 1.3,
+    halign = 1,
+    hjust = .5,
+    vjust = .5
+  ) + 
+  scale_x_continuous(limits = c(-9, 9)) +
+  scale_y_continuous(limits = c(-9, 9)) +
+  theme_cover
+```
 
 
 
