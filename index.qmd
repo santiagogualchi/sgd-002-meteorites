@@ -357,19 +357,16 @@ data_positions <- data_tidy |>
 ```
 
 ```{r}
-get_meteorite_label <- function(name, year, mass, place) {
-  glue(
-    "<span style='font-size:12pt;'>**{name}** ({year})</span><br>",
-    "<span style='font-size:11pt;'>", place, "<br>",
-    "{prettyNum(mass / 1e3, big.mark = ',')} kg</span>"
-  )
-}
 
 get_meteorite_textbox <- function(data, nrow, x, y) {
   geom_textbox(
     data = data[nrow, ],
     mapping = aes(
-      label = get_meteorite_label(name, year, mass, place)
+      label = glue(
+        "<span style='font-size:12pt;'>**{name}** ({year})</span><br>",
+        "<span style='font-size:11pt;'>", place, "<br>",
+        "{prettyNum(mass / 1e3, big.mark = ',')} kg</span>"
+      )
     ),
     x = x,
     y = y,
@@ -388,8 +385,6 @@ ggplot(data_positions) +
     data = world,
     map = world,
     mapping = aes(
-      long,
-      lat,
       map_id = region
     ),
     color = color_grey_1,
