@@ -19,6 +19,7 @@ execute:
 ```{r}
 library(dplyr)
 library(forcats)
+library(ggimage)
 library(ggplot2)
 library(ggtext)
 library(glue)
@@ -484,3 +485,42 @@ ggplot(data_positions) +
   theme_default
 ```
 
+## What's in a meteorite?
+
+```{r}
+hoba_composition <- data.frame(
+  element = c("iron", "nickel"),
+  proportion = c(84, 16)
+)
+
+ggplot(hoba_composition) +
+  geom_col(
+    aes(
+      x = 8,
+      y = proportion,
+      fill = element
+    ),
+    color = color_bg,
+    linewidth = 3
+  ) +
+  geom_image(
+    image = "resources/hoba.svg",
+    x = 0,
+    y = 0,
+    size = 1
+  ) +
+  scale_fill_discrete(type = c(color_grey_2, color_grey_2)) +
+  coord_polar(theta = "y") +
+  xlim(c(0.2, 8 + .5)) +
+  guides(fill = "none") +
+  labs(
+    title = "A Closer Look",
+    subtitle = "Characteristics of the Hoba meteorite"
+  ) +
+  theme_default +
+  theme(
+    axis.title = element_blank(),
+    axis.text = element_blank(),
+    axis.text.x = element_blank()
+  )
+```
