@@ -79,7 +79,10 @@ theme_default <- theme_minimal() +
     plot.title = element_text(
       face = "bold",
       color = color_grey_4,
-      size = unit(18, "pt")
+      size = unit(20, "pt")
+    ),
+    plot.subtitle = element_text(
+      size = unit(16, "pt")
     ),
     plot.title.position = "plot",
     plot.caption = element_text(color = color_grey_2, size = 10),
@@ -187,8 +190,8 @@ head(data_counts_by_year, 10)
 
 ## Cover
 
-This will be the cover of the instagram post. I'll use `{ggplot2}` to create it,
-to have a consistent format across all slides:
+This will be the cover of the instagram post. I'm using `{ggplot2}` to create
+it, to have a consistent format across all slides:
 
 ```{r}
 ggplot(tibble(0)) +
@@ -275,8 +278,8 @@ ggplot(
     expand = expansion(mult = 0, add = c(0, 2000))
   ) +
   labs(
-    title = "Most Meteorites Were Found Very Recently",
-    subtitle = "Almost all discoveries happened after the Space Age began",
+    title = "Found Very Recently",
+    subtitle = "Most discoveries happened after the Space Age began",
     x = NULL,
     y = NULL,
     caption = "Source: The Meteoritical Bulletin Database"
@@ -331,10 +334,10 @@ ggplot(
     title = glue(
       "Over ",
       pretty_number(sum(data_counts_by_year_last_10_years$n), big.mark = ","),
-      " Meteorites Found In 10 Years", 
+      " Found In 10 Years", 
     ),
     subtitle = glue(
-      "And many others are still in the process of being recognized"
+      "And many are still in the process of being recognized"
     ),
     x = NULL,
     y = NULL,
@@ -480,3 +483,4 @@ ggplot(data_positions) +
   ) +
   theme_default
 ```
+
