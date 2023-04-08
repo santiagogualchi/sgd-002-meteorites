@@ -1,9 +1,30 @@
 # Meteorite Landings
 
 This is a subproject of
-**[@santigualchi.data](https://www.instagram.com/santigualchi.data/)**. To find
-more information about this project go to the
-[main repository](https://github.com/santiagogualchi/sgd-000-index).
+**[@santigualchi.data](https://www.instagram.com/santigualchi.data/)**.
+
+## About the project
+
+**santigualchi.data** is a personal project where I apply my professional skills
+and favorite data science tools to explore topics that interest me. On my
+Instagram account,
+**[@santigualchi.data](https://www.instagram.com/santigualchi.data/)**,
+I showcase the results of this project, transforming raw data into compelling
+stories.
+
+But that's not all. Each story is developed according to
+**[Serious Data Science](https://posit.co/blog/driving-real-lasting-value-with-serious-data-science/)**
+principles, and all the code used to generate each slide is publicly available
+in separate repositories. This way, anyone interested can examine the code and
+learn from it.
+
+## Project status
+
+The Instagram account has been created but it'll remain private until
+sgd-001-happiness and
+[sgd-002-meteorites](https://github.com/santiagogualchi/sgd-002-meteorites) are
+completed. After launching the Instagram account, posts will be done in a
+monthly basis.
 
 ## Description
 
@@ -40,7 +61,10 @@ URL
 License
 : [CC0: Public Domain](https://creativecommons.org/publicdomain/zero/1.0/)
 
-### Alternative dataset
+## Bibliography
+
+McSweend, H. Y., Jr. (2010). Meteorites and their parent planets. Cambridge
+University Press.
 
 ## License
 
