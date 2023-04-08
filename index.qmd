@@ -217,9 +217,38 @@ ggplot(tibble(0)) +
 ```
 
 
-## Discoveries per year
+## 200 Years Of Meteoritics
 
-This plot will have the number of meteorites found by year:
+Reports of falling meteorites and discoveries on land extend thousands of years
+into the past, but the mysteries of their origin and nature were not always
+understood. Over time, various explanations have been proposed, ranging from
+religious and magical to more scientific theories. Some cultures revered
+meteorites as divine gifts, while others attributed their existence to volcanic
+eruptions or atmospheric phenomena. Many people even dismissed the existence
+of meteorites altogether, discrediting any mention of them as mere folklore.
+
+Instead, the idea that meteorites come from outer space was disregarded by
+the scientific community for many years, as it was believed that no small
+objects existed in interplanetary space. However, in 1794 Ernst Chladni
+suggested that the physical properties of these objects could only be accounted
+for by their extraterrestrial origin. Chladni's idea amounted to scientific
+heresy at the time, but subsequent research, along with some conveniently-timed
+meteorite sightings, ultimately led to widespread recognition that
+meteorites are indeed extraterrestrial in 1803.
+
+Since then, interest in space greatly increased and numerous technological
+breakthroughs were made. In 1974,
+`r data_counts_by_year[data_counts_by_year$year == 1974, ]$n` meteorites were
+discovered, a dramatic increase from the previous record of
+`r max(data_counts_by_year[data_counts_by_year$year < 1974, ]$n)` in
+`r max(data_counts_by_year[data_counts_by_year$year < 1974, ]$year)`. But the
+current record was reached in the year
+`r data_counts_by_year[max(data_counts_by_year$n) == data_counts_by_year$n, ]$year`,
+with 
+`r data_counts_by_year[max(data_counts_by_year$n) == data_counts_by_year$n, ]$n`
+meteorites discovered. As of the beginning of 2023, over `r nrow(data_tidy)`
+meteorites are known.
+
 
 ```{r}
 data_counts_by_year_since_1800 <- data_counts_by_year |> 
@@ -228,8 +257,9 @@ data_counts_by_year_since_1800 <- data_counts_by_year |>
 milestones <- tribble(
   ~year, ~milestone,
   1803,  "Recognition of meteorites<br>as extraterrestrial",
-  1957,  "Beginning of<br>the Space Age",
-  2023,  "Present day"
+  1974,  "",
+  1979,  "",
+  2000,  "Current record"
 )
 
 ggplot(
@@ -250,7 +280,7 @@ ggplot(
   geom_richtext(
     data = milestones,
     mapping = aes(
-      x = year + 3,
+      x = year + c(3, -3, 3, 3),
       label = paste0(
         "<span style='font-size:12pt;'>**", year, "**</span><br>",
         "<span style='font-size:11pt;'>", milestone, "</span><br>"
@@ -260,7 +290,7 @@ ggplot(
     color = color_grey_3,
     fill = "transparent",
     label.color = "transparent",
-    hjust = 0,
+    hjust = c(0, 1, 0, 0),
     vjust = 1,
     label.padding = unit(0, "pt")
   ) +
@@ -270,16 +300,16 @@ ggplot(
     width = 2
   ) +
   scale_x_continuous(
-    limits = c(1800, 2050),
-    breaks = seq(1800, 2050, by = 50),
-    expand = expansion(mult = c(.05, .075))
+    limits = c(1800, 2023),
+    breaks = seq(1800, 2023, by = 50) |> c(2023) |> unique(),
+    expand = expansion(mult = c(.08, .08))
   ) +
   scale_y_continuous(
     breaks = NULL,
     expand = expansion(mult = 0, add = c(0, 2000))
   ) +
   labs(
-    title = "Found Very Recently",
+    title = "200 Hundred Years Of Meteoritics",
     subtitle = "Most discoveries happened after the Space Age began",
     x = NULL,
     y = NULL,
@@ -488,39 +518,39 @@ ggplot(data_positions) +
 ## What's in a meteorite?
 
 ```{r}
-hoba_composition <- data.frame(
-  element = c("iron", "nickel"),
-  proportion = c(84, 16)
-)
-
-ggplot(hoba_composition) +
-  geom_col(
-    aes(
-      x = 8,
-      y = proportion,
-      fill = element
-    ),
-    color = color_bg,
-    linewidth = 3
-  ) +
-  geom_image(
-    image = "resources/hoba.svg",
-    x = 0,
-    y = 0,
-    size = 1
-  ) +
-  scale_fill_discrete(type = c(color_grey_2, color_grey_2)) +
-  coord_polar(theta = "y") +
-  xlim(c(0.2, 8 + .5)) +
-  guides(fill = "none") +
-  labs(
-    title = "A Closer Look",
-    subtitle = "Characteristics of the Hoba meteorite"
-  ) +
-  theme_default +
-  theme(
-    axis.title = element_blank(),
-    axis.text = element_blank(),
-    axis.text.x = element_blank()
-  )
+# hoba_fun_facts <- data.frame(
+#   fun_fact = c(
+#     "Largest known meteorite found intact. It weighs 60 tons.",
+#     "Iron meteorite. Composed of 84% iron and 16% nickel.",
+#     "Landed on Namibia about 80,000 years ago."
+#   )
+# )
+# 
+# ggplot(hoba_composition) +
+#   annotation_raster(
+#     img,
+#     xmin = -Inf,
+#     xmax = Inf,
+#     ymin = -Inf,
+#     ymax = Inf
+#   )
+#   # geom_image(
+#   #   image = "resources/hoba.svg",
+#   #   x = 0,
+#   #   y = 0,
+#   #   size = 1
+#   # ) +
+#   scale_fill_discrete(type = c(color_grey_2, color_grey_2)) +
+#   xlim(c(0.2, 8 + .5)) +
+#   guides(fill = "none") +
+#   labs(
+#     title = "A Closer Look",
+#     subtitle = "Characteristics of the Hoba meteorite"
+#   ) +
+#   theme_default +
+#   theme(
+#     axis.title = element_blank(),
+#     axis.text = element_blank(),
+#     axis.text.x = element_blank()
+#   )
 ```
