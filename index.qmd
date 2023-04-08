@@ -319,7 +319,9 @@ ggplot(
   theme_x_line
 ```
 
-## Discoveries Last 10 Years
+## Over X Found In 10 Years
+
+DESCRIPTION PENDING.
 
 ```{r}
 data_counts_by_year_last_10_years <- data_counts_by_year |>
@@ -377,7 +379,9 @@ ggplot(
   theme_default
 ```
 
-## Impact positions
+## A Global Phenomenon
+
+DESCRIPTION PENDING
 
 ```{r}
 data_positions <- data_tidy |> 
