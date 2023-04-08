@@ -21,10 +21,8 @@ learn from it.
 ## Project status
 
 The Instagram account has been created but it'll remain private until
-sgd-001-happiness and
-[sgd-002-meteorites](https://github.com/santiagogualchi/sgd-002-meteorites) are
-completed. After launching the Instagram account, posts will be done in a
-monthly basis.
+sgd-001-happiness and sgd-002-meteorites are completed. After launching the
+Instagram account, posts will be done in a monthly basis.
 
 ## Description
 
