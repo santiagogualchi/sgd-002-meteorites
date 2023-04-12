@@ -230,13 +230,14 @@ ggplot(
   theme_x_line
 ```
 
-Reports of falling rocks and discoveries on land extend thousands of years into
-the past, but the mysteries of their origin and nature were not always
-understood. Over time, various explanations have been proposed, ranging from
-religious and magical to more scientific theories. Some cultures revered
-meteorites as divine gifts, while others attributed their existence to volcanic
-eruptions or atmospheric phenomena. Many people even dismissed the existence of
-meteorites altogether, discrediting any mention of them as mere folklore.
+Reports of rocks falling from the sky and meteorite discoveries on land extend
+thousands of years into the past, but the mysteries of their origin and nature
+were not always understood. Over time, various explanations have been proposed,
+ranging from religious and magical to more scientific theories. Some cultures
+revered meteorites as divine gifts, while others attributed their existence to
+volcanic eruptions or atmospheric phenomena. Many people even dismissed the
+existence of meteorites altogether, discrediting any mention of them as mere
+folklore.
 
 Instead, the idea that meteorites come from outer space was disregarded by the
 scientific community for many years, as it was believed that no small objects
@@ -259,7 +260,7 @@ identified and documented.
 
 ## Over X Found In 10 Years
 
-DESCRIPTION PENDING.
+DESCRIPTION PENDING. 
 
 ```{r}
 data_counts_by_year_last_10_years <- data_counts_by_year |>
