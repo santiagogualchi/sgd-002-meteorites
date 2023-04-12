@@ -27,14 +27,18 @@ library(readr)
 library(stringr)
 library(tibble)
 library(tidyr)
+```
 
+## Source
+
+```{r}
 source("R/theming.R")
 ```
 
 ## Data
 
 We'll use the web-scraped data if available, or the alternative data otherwise
-(see README.md).
+(see [README.md]).
 
 ```{r}
 file_path <- if (file.exists("nogit/tidy-data.csv")) {
@@ -67,7 +71,7 @@ data_raw <- read_csv(
   # This left_join is performed in order to ensure that there's a place column
   # in the alternative data.
   left_join(
-    tibble(name = "INEXISTENT-NAME-SANTIGUALCHI.DATA", place = ""),
+    tibble(name = "PLACEHOLDER-NAME-SANTIGUALCHI.DATA", place = ""),
     by = "name",
     # We include the suffixes because, for the web-scraped data, there'll be
     # two place columns. This way, we preserve the original place column name
