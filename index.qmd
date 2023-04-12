@@ -42,7 +42,7 @@ source("R/helpers.R")
 ## Wrangling
 
 We'll use the web-scraped data if available, or the alternative data otherwise
-(see \[README.md\]).
+(see [README.md](README.md)).
 
 ```{r}
 file_path <- if (file.exists("nogit/tidy-data.csv")) {
@@ -141,50 +141,38 @@ ggplot(tibble(0)) +
   theme_cover
 ```
 
-## 200 Years Of Meteoritics
-
-Reports of falling meteorites and discoveries on land extend thousands of years
-into the past, but the mysteries of their origin and nature were not always
-understood. Over time, various explanations have been proposed, ranging from
-religious and magical to more scientific theories. Some cultures revered
-meteorites as divine gifts, while others attributed their existence to volcanic
-eruptions or atmospheric phenomena. Many people even dismissed the existence of
-meteorites altogether, discrediting any mention of them as mere folklore.
-
-Instead, the idea that meteorites come from outer space was disregarded by the
-scientific community for many years, as it was believed that no small objects
-existed in interplanetary space. However, in 1794 Ernst Chladni suggested that
-the physical properties of these objects could only be accounted for by their
-extraterrestrial origin. Chladni's idea amounted to scientific heresy at the
-time, but subsequent research, along with some conveniently-timed meteorite
-sightings, ultimately led to widespread recognition that meteorites are indeed
-extraterrestrial in 1803.
-
-Since then, interest in space greatly increased and numerous technological
-breakthroughs were made. In 1974,
-`r data_counts_by_year[data_counts_by_year$year == 1974, ]$n` meteorites were
-discovered, a dramatic increase from the previous record of
-`r max(data_counts_by_year[data_counts_by_year$year < 1974, ]$n)` in
-`r max(data_counts_by_year[data_counts_by_year$year < 1974, ]$year)`. But the
-current record was reached in the year
-`r data_counts_by_year[max(data_counts_by_year$n) == data_counts_by_year$n, ]$year`,
-with
-`r data_counts_by_year[max(data_counts_by_year$n) == data_counts_by_year$n, ]$n`
-meteorites discovered. As of the beginning of 2023, over `r nrow(data_tidy)`
-meteorites are known.
+## 200+ Years Of Meteoritics
 
 ```{r}
+# This data will be used in the plot and the text.
+
+milestone_year <- 1979
+
+n_meteorites_in_milestone <- data_counts_by_year |> 
+  filter(year == milestone_year) |> 
+  pull(n)
+
+current_record_year <- data_counts_by_year |> 
+  filter(n == max(n)) |> 
+  pull(year) |> 
+  first()
+
+current_record <- data_counts_by_year |> 
+  filter(year == current_record_year) |> 
+  pull(n)
+
 data_counts_by_year_since_1800 <- data_counts_by_year |> 
   filter(year >= 1800)
 
 milestones <- tribble(
   ~year, ~milestone,
   1803,  "Recognition of meteorites<br>as extraterrestrial",
-  1974,  "",
-  1979,  "",
+  milestone_year,  "",
   2000,  "Current record"
 )
+```
 
+```{r}
 ggplot(
   data_counts_by_year_since_1800,
   mapping = aes(
@@ -203,7 +191,7 @@ ggplot(
   geom_richtext(
     data = milestones,
     mapping = aes(
-      x = year + c(3, -3, 3, 3),
+      x = year + 1.5,
       label = paste0(
         "<span style='font-size:12pt;'>**", year, "**</span><br>",
         "<span style='font-size:11pt;'>", milestone, "</span><br>"
@@ -213,7 +201,7 @@ ggplot(
     color = color_grey_3,
     fill = "transparent",
     label.color = "transparent",
-    hjust = c(0, 1, 0, 0),
+    hjust = c(0, 0, 0),
     vjust = 1,
     label.padding = unit(0, "pt")
   ) +
@@ -225,22 +213,49 @@ ggplot(
   scale_x_continuous(
     limits = c(1800, 2023),
     breaks = seq(1800, 2023, by = 50) |> c(2023) |> unique(),
-    expand = expansion(mult = c(.08, .08))
+    expand = expansion(mult = c(.05, .11))
   ) +
   scale_y_continuous(
     breaks = NULL,
     expand = expansion(mult = 0, add = c(0, 2000))
   ) +
   labs(
-    title = "200 Hundred Years Of Meteoritics",
-    subtitle = "Most discoveries happened after the Space Age began",
+    title = "200+ Years Of Meteoritics",
+    subtitle = "Most discoveries happened in recent years",
     x = NULL,
     y = NULL,
-    caption = "Source: The Meteoritical Bulletin Database"
+    caption = "Sources: The Meteoritical Bulletin Database & McSweend (2010)"
   ) +
   theme_default +
   theme_x_line
 ```
+
+Reports of falling rocks and discoveries on land extend thousands of years into
+the past, but the mysteries of their origin and nature were not always
+understood. Over time, various explanations have been proposed, ranging from
+religious and magical to more scientific theories. Some cultures revered
+meteorites as divine gifts, while others attributed their existence to volcanic
+eruptions or atmospheric phenomena. Many people even dismissed the existence of
+meteorites altogether, discrediting any mention of them as mere folklore.
+
+Instead, the idea that meteorites come from outer space was disregarded by the
+scientific community for many years, as it was believed that no small objects
+existed in interplanetary space. However, in 1794 Ernst Chladni suggested that
+the physical properties of these objects could only be accounted for by an
+extraterrestrial origin. Chladni's idea amounted to scientific heresy at the
+time, but subsequent research, along with some conveniently-timed meteorite
+sightings, ultimately led to widespread recognition that meteorites are indeed
+extraterrestrial in 1803.
+
+Since then, interest in meteoritics greatly increased and numerous technological
+breakthroughs were made. In fact, in `r milestone_year` alone, a staggering
+`r pretty_number(n_meteorites_in_milestone, Inf, big.mark = ",")` meteorites
+were discovered --- more than had been found during that century up to that
+point. Currently, the record is held by the year `r current_record_year` with
+`r pretty_number(current_record, Inf, big.mark = ",")` meteorites discovered. As
+of the beginning of 2023, over
+`r pretty_number(nrow(data_tidy), big.mark = ",")` meteorites have been
+identified and documented.
 
 ## Over X Found In 10 Years
 
@@ -249,14 +264,6 @@ DESCRIPTION PENDING.
 ```{r}
 data_counts_by_year_last_10_years <- data_counts_by_year |>
   filter(year > (max(year) - 10))
-
-# This function formats x. It truncates x to only keep the number signif of
-# significative digits (even for whole numbers). For example,
-# pretty_number(12345) returns 12000. Further arguments are passed to prettyNum.
-pretty_number <- function(x, signif = 2, ...) {
-  (x - x %% 10 ^ (floor(log10(x)) - (signif - 1))) |> 
-    prettyNum(...)
-}
 
 ggplot(
   data_counts_by_year_last_10_years,
@@ -301,6 +308,8 @@ ggplot(
   ) +
   theme_default
 ```
+
+
 
 ## A Global Phenomenon
 
