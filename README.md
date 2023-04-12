@@ -3,7 +3,7 @@
 This is a subproject of
 **[@santigualchi.data](https://www.instagram.com/santigualchi.data/)**.
 
-## About the project
+## About the **santigualchi.data**
 
 **santigualchi.data** is a personal project where I apply my professional skills
 and favorite data science tools to explore topics that interest me. On my
