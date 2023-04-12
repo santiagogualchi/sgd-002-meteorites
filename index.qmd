@@ -10,6 +10,9 @@ format:
     toc-depth: 3
 execute: 
   warning: false
+editor: 
+  markdown: 
+    wrap: 80
 ---
 
 ## Introduction
@@ -33,12 +36,13 @@ library(tidyr)
 
 ```{r}
 source("R/theming.R")
+source("R/helpers.R")
 ```
 
-## Data
+## Wrangling
 
 We'll use the web-scraped data if available, or the alternative data otherwise
-(see [README.md]).
+(see \[README.md\]).
 
 ```{r}
 file_path <- if (file.exists("nogit/tidy-data.csv")) {
@@ -68,18 +72,9 @@ data_raw <- read_csv(
     nametype = fct_recode(nametype, Official = "Valid"),
     fall = fct_recode(fall, Fall = "Fell", Find = "Found")
   ) |> 
-  # This left_join is performed in order to ensure that there's a place column
-  # in the alternative data.
-  left_join(
-    tibble(name = "PLACEHOLDER-NAME-SANTIGUALCHI.DATA", place = ""),
-    by = "name",
-    # We include the suffixes because, for the web-scraped data, there'll be
-    # two place columns. This way, we preserve the original place column name
-    # and distinguish the dummy column with the suffix "_drop".
-    suffix = c("", "_drop")
-  ) |> 
-  # Now we can drop the dummy column if present.
-  select(-ends_with("_drop"))
+  # We need to add the `place` column to the alternative dataset because it's
+  # not present in the CSV.
+  add_col_if_missing("place", NA_character_)
 
 head(data_raw, 10)
 ```
@@ -119,7 +114,6 @@ data_counts_by_year <- data_tidy |>
 head(data_counts_by_year, 10)
 ```
 
-
 ## Cover
 
 This will be the cover of the instagram post. I'm using `{ggplot2}` to create
@@ -147,7 +141,6 @@ ggplot(tibble(0)) +
   theme_cover
 ```
 
-
 ## 200 Years Of Meteoritics
 
 Reports of falling meteorites and discoveries on land extend thousands of years
@@ -155,17 +148,17 @@ into the past, but the mysteries of their origin and nature were not always
 understood. Over time, various explanations have been proposed, ranging from
 religious and magical to more scientific theories. Some cultures revered
 meteorites as divine gifts, while others attributed their existence to volcanic
-eruptions or atmospheric phenomena. Many people even dismissed the existence
-of meteorites altogether, discrediting any mention of them as mere folklore.
+eruptions or atmospheric phenomena. Many people even dismissed the existence of
+meteorites altogether, discrediting any mention of them as mere folklore.
 
-Instead, the idea that meteorites come from outer space was disregarded by
-the scientific community for many years, as it was believed that no small
-objects existed in interplanetary space. However, in 1794 Ernst Chladni
-suggested that the physical properties of these objects could only be accounted
-for by their extraterrestrial origin. Chladni's idea amounted to scientific
-heresy at the time, but subsequent research, along with some conveniently-timed
-meteorite sightings, ultimately led to widespread recognition that
-meteorites are indeed extraterrestrial in 1803.
+Instead, the idea that meteorites come from outer space was disregarded by the
+scientific community for many years, as it was believed that no small objects
+existed in interplanetary space. However, in 1794 Ernst Chladni suggested that
+the physical properties of these objects could only be accounted for by their
+extraterrestrial origin. Chladni's idea amounted to scientific heresy at the
+time, but subsequent research, along with some conveniently-timed meteorite
+sightings, ultimately led to widespread recognition that meteorites are indeed
+extraterrestrial in 1803.
 
 Since then, interest in space greatly increased and numerous technological
 breakthroughs were made. In 1974,
@@ -175,11 +168,10 @@ discovered, a dramatic increase from the previous record of
 `r max(data_counts_by_year[data_counts_by_year$year < 1974, ]$year)`. But the
 current record was reached in the year
 `r data_counts_by_year[max(data_counts_by_year$n) == data_counts_by_year$n, ]$year`,
-with 
+with
 `r data_counts_by_year[max(data_counts_by_year$n) == data_counts_by_year$n, ]$n`
 meteorites discovered. As of the beginning of 2023, over `r nrow(data_tidy)`
 meteorites are known.
-
 
 ```{r}
 data_counts_by_year_since_1800 <- data_counts_by_year |> 
