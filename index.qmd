@@ -165,10 +165,12 @@ data_counts_by_year_since_1800 <- data_counts_by_year |>
   filter(year >= 1800)
 
 milestones <- tribble(
-  ~year, ~milestone,
-  1803,  "Recognition of meteorites<br>as extraterrestrial",
-  milestone_year,  "",
-  2000,  "Current record"
+  ~year,           ~milestone,
+  1803,            "Recognition of meteorites<br>as extraterrestrial",
+  milestone_year,  glue(prettyNum(n_meteorites_in_milestone, big.mark = ","),
+                        " found"),
+  2000,            glue(prettyNum(current_record, big.mark = ","), " found",
+                        "<br> (current record)")
 )
 ```
 
@@ -191,7 +193,7 @@ ggplot(
   geom_richtext(
     data = milestones,
     mapping = aes(
-      x = year + 1.5,
+      x = year + c(3, -3, 3),
       label = paste0(
         "<span style='font-size:12pt;'>**", year, "**</span><br>",
         "<span style='font-size:11pt;'>", milestone, "</span><br>"
@@ -201,7 +203,7 @@ ggplot(
     color = color_grey_3,
     fill = "transparent",
     label.color = "transparent",
-    hjust = c(0, 0, 0),
+    hjust = c(0, 1, 0),
     vjust = 1,
     label.padding = unit(0, "pt")
   ) +
@@ -213,7 +215,7 @@ ggplot(
   scale_x_continuous(
     limits = c(1800, 2023),
     breaks = seq(1800, 2023, by = 50) |> c(2023) |> unique(),
-    expand = expansion(mult = c(.05, .11))
+    expand = expansion(mult = c(.025, .13))
   ) +
   scale_y_continuous(
     breaks = NULL,
@@ -250,10 +252,10 @@ extraterrestrial in 1803.
 
 Since then, interest in meteoritics greatly increased and numerous technological
 breakthroughs were made. In fact, in `r milestone_year` alone, a staggering
-`r pretty_number(n_meteorites_in_milestone, Inf, big.mark = ",")` meteorites
+`r prettyNum(n_meteorites_in_milestone, big.mark = ",")` meteorites
 were discovered --- more than had been found during that century up to that
 point. Currently, the record is held by the year `r current_record_year` with
-`r pretty_number(current_record, Inf, big.mark = ",")` meteorites discovered. As
+`r prettyNum(current_record, big.mark = ",")` meteorites discovered. As
 of the beginning of 2023, over
 `r pretty_number(nrow(data_tidy), big.mark = ",")` meteorites have been
 identified and documented.
