@@ -262,8 +262,6 @@ identified and documented.
 
 ## Over X Found In 10 Years
 
-DESCRIPTION PENDING. 
-
 ```{r}
 data_counts_by_year_last_10_years <- data_counts_by_year |>
   filter(year > (max(year) - 10))
@@ -312,7 +310,8 @@ ggplot(
   theme_default
 ```
 
-
+The Meteoritical Society, established in 1933, is the organization responsible
+for naming and classifying meteorites.
 
 ## A Global Phenomenon
 
